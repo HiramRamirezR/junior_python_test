@@ -2,92 +2,39 @@ import argparse
 import json
 import csv
 
-class JSONSearcher:
-    """
-    Esta clase implementa un buscador y editor de datos en formato JSON.
-    """
+class JSONSearcher: #Esta clase implementa un buscador y editor de datos en formato JSON.
 
     def __init__(self, data):
-        """
-        Constructor de la clase.
-
-        Parameters
-        ----------
-        data : list
-            Lista de objetos en formato JSON.
-        """
+        """ Constructor de la clase.
+        Recibe como parámetro una lista de objetos JSON que se almacenan en data."""
         self.data = data
 
+#Métods de la clase JSONSearcher
     def search(self, **kwargs):
-        """
-        Busca objetos en la lista de datos que coincidan con los argumentos de búsqueda.
-
-        Parameters
-        ----------
-        **kwargs : dict
-            Argumentos de búsqueda en formato clave-valor.
-
-        Returns
-        -------
-        list
-            Lista de objetos que coinciden con los argumentos de búsqueda.
-        """
+        """ Busca objetos en la lista de datos que coincidan con los argumentos de búsqueda (name= Alice).
+        Devuelve una lista de objetos que coinciden con los argumentos de búsqueda."""
         results = []
         for item in self.data:
             if all(item.get(key) == value for key, value in kwargs.items()):
                 results.append(item)
         return results
 
-    def insert(self, **kwargs):
-        """
-        Inserta un nuevo objeto en la lista de datos.
-
-        Parameters
-        ----------
-        **kwargs : dict
-            Nuevo objeto en formato clave-valor.
-        """
+    def insert(self, **kwargs): #Inserta un nuevo objeto en la lista (name= Hiram).
         self.data.append(kwargs)
 
-    def edit(self, index, **kwargs):
-        """
-        Edita un objeto existente en la lista de datos.
-
-        Parameters
-        ----------
-        index : int
-            Índice del objeto a editar.
-        **kwargs : dict
-            Nuevos valores en formato clave-valor para el objeto.
-        """
+    def edit(self, index, **kwargs): #Edita un objeto en la lista de datos.
+        """ index : Índice del objeto a editar.
+        **kwargs : Nuevos valores en formato clave-valor."""
         self.data[index].update(kwargs)
 
-    def delete(self, index):
-        """
-        Elimina un objeto existente en la lista de datos.
-
-        Parameters
-        ----------
-        index : int
-            Índice del objeto a eliminar.
-        """
+    def delete(self, index): #Elimina un objeto existente en la lista de datos.
         del self.data[index]
 
-    def export(self, file_path, export_format="csv", results=None, results_only=False):
-        """
-        Exporta la lista de datos a un archivo en formato CSV o JSON.
-
-        Parameters
-        ----------
-        file_path : str
-            Ruta del archivo de salida.
-        export_format : str, optional
-            Formato de exportación (csv o json), por defecto "csv".
-        results : list, optional
-            Lista de objetos a exportar, por defecto None.
-        results_only : bool, optional
-            Si se exportan solo los resultados de una búsqueda, por defecto False.
-        """
+    def export(self, file_path, export_format="csv", results=None, results_only=False): #Exporta la lista de datos a un archivo CSV o JSON.
+        """ file_path : Ruta del archivo de salida.
+        export_format : Formato de exportación, csv o json.
+        results : Lista de objetos a exportar.
+        results_only : Exportar solo los resultados de una búsqueda."""
         if not results:
             results = self.data
 
@@ -105,9 +52,12 @@ class JSONSearcher:
             with open(file_path, "w") as file:
                 json.dump(data_to_export, file, indent=4)
 
+""" La función main() maneja los métodos de search, insert, edit y delete que se ingresan como argumentos
+en la CLI. Luego, se almacenan los resultados de la operación en `results`. """
 
 def main():
-    parser = argparse.ArgumentParser(description="Search a JSON file for objects with specific attributes")
+    #El módulo argparse para usa para definir los argumentos de la línea de comandos.
+    parser = argparse.ArgumentParser(prog="JSON Searcher", description="Search a JSON file for objects with specific attributes")
     parser.add_argument("--input_file", type=str, required=True, help="Path to input JSON file")
     parser.add_argument("--output_file", type=str, required=True, help="Path to output file")
     parser.add_argument("--search", type=str, nargs="*", help="Search query in the format 'key=value'")
@@ -122,9 +72,6 @@ def main():
 
     searcher = JSONSearcher(data)
 
-# Este bloque de código maneja las opciones de búsqueda, inserción, edición o eliminación
-# que se ingresan como argumentos de línea de comando y llama a los métodos correspondientes
-# del objeto `searcher`. Luego, se almacenan los resultados de la operación en la variable `results`.
 
     if args.search: # Si se ha especificado una búsqueda
         search_query = {}
@@ -159,7 +106,7 @@ def main():
     # Exportar los resultados a un archivo de salida
     searcher.export(args.output_file, export_format=args.export_format)
 
-    # Si se encontraron resultados, mostrarlos por pantalla y exportarlos a un archivo de salida
+    # Si se encontraron resultados, mostrarlos por pantalla y exportarlos a un archivo csv
     if results:
         print(f"{len(results)} results found:")
         for item in results:
@@ -168,7 +115,7 @@ def main():
                         export_format=args.export_format,
                         results=results,
                         results_only=True)
-    else: # Si no se encontraron resultados, mostrar un mensaje indicando esto
+    else: # Si no se encuentrann resultados
         print("No results found.")
 
 
