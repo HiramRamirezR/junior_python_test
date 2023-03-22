@@ -2,12 +2,36 @@ import argparse
 import json
 import csv
 
-
 class JSONSearcher:
+    """
+    Esta clase implementa un buscador y editor de datos en formato JSON.
+    """
+
     def __init__(self, data):
+        """
+        Constructor de la clase.
+
+        Parameters
+        ----------
+        data : list
+            Lista de objetos en formato JSON.
+        """
         self.data = data
 
     def search(self, **kwargs):
+        """
+        Busca objetos en la lista de datos que coincidan con los argumentos de búsqueda.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Argumentos de búsqueda en formato clave-valor.
+
+        Returns
+        -------
+        list
+            Lista de objetos que coinciden con los argumentos de búsqueda.
+        """
         results = []
         for item in self.data:
             if all(item.get(key) == value for key, value in kwargs.items()):
@@ -15,15 +39,55 @@ class JSONSearcher:
         return results
 
     def insert(self, **kwargs):
+        """
+        Inserta un nuevo objeto en la lista de datos.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Nuevo objeto en formato clave-valor.
+        """
         self.data.append(kwargs)
 
     def edit(self, index, **kwargs):
+        """
+        Edita un objeto existente en la lista de datos.
+
+        Parameters
+        ----------
+        index : int
+            Índice del objeto a editar.
+        **kwargs : dict
+            Nuevos valores en formato clave-valor para el objeto.
+        """
         self.data[index].update(kwargs)
 
     def delete(self, index):
+        """
+        Elimina un objeto existente en la lista de datos.
+
+        Parameters
+        ----------
+        index : int
+            Índice del objeto a eliminar.
+        """
         del self.data[index]
 
     def export(self, file_path, export_format="csv", results=None, results_only=False):
+        """
+        Exporta la lista de datos a un archivo en formato CSV o JSON.
+
+        Parameters
+        ----------
+        file_path : str
+            Ruta del archivo de salida.
+        export_format : str, optional
+            Formato de exportación (csv o json), por defecto "csv".
+        results : list, optional
+            Lista de objetos a exportar, por defecto None.
+        results_only : bool, optional
+            Si se exportan solo los resultados de una búsqueda, por defecto False.
+        """
         if not results:
             results = self.data
 
@@ -58,44 +122,55 @@ def main():
 
     searcher = JSONSearcher(data)
 
-    if args.search:
+# Este bloque de código maneja las opciones de búsqueda, inserción, edición o eliminación
+# que se ingresan como argumentos de línea de comando y llama a los métodos correspondientes
+# del objeto `searcher`. Luego, se almacenan los resultados de la operación en la variable `results`.
+
+    if args.search: # Si se ha especificado una búsqueda
         search_query = {}
         for item in args.search:
             key, value = item.split("=")
             search_query[key] = value
-        results = searcher.search(**search_query)
-    elif args.insert:
+        results = searcher.search(**search_query) # Realizar la búsqueda utilizando los parámetros especificados
+
+    elif args.insert: # Si se ha especificado una inserción
         insert_query = {}
         for item in args.insert:
             key, value = item.split("=")
             insert_query[key] = value
-        searcher.insert(**insert_query)
-        results = [insert_query]
-    elif args.edit is not None:
+        searcher.insert(**insert_query) # Insertar el elemento en el objeto JSON
+        results = [insert_query] # Almacenar el elemento insertado en la variable `results`
+
+    elif args.edit is not None: # Si se ha especificado una edición
         edit_query = {}
         for item in args.insert:
             key, value = item.split("=")
             edit_query[key] = value
-        searcher.edit(args.edit, **edit_query)
-        results = [searcher.data[args.edit]]
-    elif args.delete is not None:
-        searcher.delete(args.delete)
-        results = []
-    else:
+        searcher.edit(args.edit, **edit_query) # Editar el elemento en el objeto JSON
+        results = [searcher.data[args.edit]] # Almacenar el elemento editado en la variable `results`
+
+    elif args.delete is not None: # Si se ha especificado una eliminación
+        searcher.delete(args.delete) # Eliminar el elemento del objeto JSON
+        results = [] # Establecer la variable `results` en una lista vacía
+
+    else: # Si no se ha especificado ninguna operación, mostrar todo el contenido del objeto JSON
         results = searcher.data
 
+    # Exportar los resultados a un archivo de salida
     searcher.export(args.output_file, export_format=args.export_format)
 
+    # Si se encontraron resultados, mostrarlos por pantalla y exportarlos a un archivo de salida
     if results:
         print(f"{len(results)} results found:")
         for item in results:
             print(item)
         searcher.export(args.output_file,
-                    export_format=args.export_format,
-                    results=results,
-                    results_only=True)
-    else:
+                        export_format=args.export_format,
+                        results=results,
+                        results_only=True)
+    else: # Si no se encontraron resultados, mostrar un mensaje indicando esto
         print("No results found.")
+
 
 
 if __name__ == "__main__":
