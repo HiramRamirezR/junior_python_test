@@ -58,47 +58,48 @@ en la CLI. Luego, se almacenan los resultados de la operación en `results`. """
 def main():
     #El módulo argparse para usa para definir los argumentos de la línea de comandos.
     parser = argparse.ArgumentParser(prog="JSON Searcher", description="Search a JSON file for objects with specific attributes")
-    parser.add_argument("--input_file", type=str, required=True, help="Path to input JSON file")
-    parser.add_argument("--output_file", type=str, required=True, help="Path to output file")
-    parser.add_argument("--search", type=str, nargs="*", help="Search query in the format 'key=value'")
-    parser.add_argument("--insert", type=str, nargs="*", help="Object to insert in the format 'key=value'")
-    parser.add_argument("--edit", type=int, help="Index of object to edit")
-    parser.add_argument("--delete", type=int, help="Index of object to delete")
-    parser.add_argument("--export_format", type=str, choices=["csv", "json"], default="csv", help="Export format (csv or json)")
+    parser.add_argument("--input_file", type=str, required=True, help="Ruta del archivo de entrada en formato JSON.")
+    parser.add_argument("--output_file", type=str, required=True, help="Ruta del archivo de salida.")
+    parser.add_argument("--search", type=str, nargs="*", help="Argumentos de búsqueda en formato 'clave=valor'.")
+    parser.add_argument("--insert", type=str, nargs="*", help="Nuevo objeto en formato 'clave=valor'.")
+    parser.add_argument("--edit", type=int, help="Índice del objeto a editar.")
+    parser.add_argument("--delete", type=int, help="Índice del objeto a eliminar.")
+    parser.add_argument("--export_format", type=str, choices=["csv", "json"], default="csv", help="Formato de exportación (csv o json)")
     args = parser.parse_args()
 
+    #La función main() abre el archivo JSON, crea un objeto JSONSearcher a partir de los datos y realiza la operación especificada.
     with open(args.input_file, "r") as file:
         data = json.load(file)
 
     searcher = JSONSearcher(data)
 
 
-    if args.search: # Si se ha especificado una búsqueda
+    if args.search: # Si se hace una búsqueda
         search_query = {}
         for item in args.search:
             key, value = item.split("=")
             search_query[key] = value
-        results = searcher.search(**search_query) # Realizar la búsqueda utilizando los parámetros especificados
+        results = searcher.search(**search_query) # Almacena los resultados de la búsqueda en la variable `results`
 
-    elif args.insert: # Si se ha especificado una inserción
+    elif args.insert: # Si se agrega un registro
         insert_query = {}
         for item in args.insert:
             key, value = item.split("=")
             insert_query[key] = value
-        searcher.insert(**insert_query) # Insertar el elemento en el objeto JSON
-        results = [insert_query] # Almacenar el elemento insertado en la variable `results`
+        searcher.insert(**insert_query) # Inserta el elemento en el objeto JSON
+        results = [insert_query] # Y Almacena el elemento insertado en la variable `results`
 
-    elif args.edit is not None: # Si se ha especificado una edición
+    elif args.edit is not None: # Si se quiere editar un elemento
         edit_query = {}
         for item in args.insert:
             key, value = item.split("=")
             edit_query[key] = value
-        searcher.edit(args.edit, **edit_query) # Editar el elemento en el objeto JSON
-        results = [searcher.data[args.edit]] # Almacenar el elemento editado en la variable `results`
+        searcher.edit(args.edit, **edit_query) # Edita el elemento en el objeto JSON
+        results = [searcher.data[args.edit]] # Y almacenar el elemento editado en la variable `results`
 
-    elif args.delete is not None: # Si se ha especificado una eliminación
-        searcher.delete(args.delete) # Eliminar el elemento del objeto JSON
-        results = [] # Establecer la variable `results` en una lista vacía
+    elif args.delete is not None: # Si se quiere eliminar un elemento
+        searcher.delete(args.delete) # Elimina el elemento del objeto JSON
+        results = [] # Y asigna una lista vacía a la variable `results`
 
     else: # Si no se ha especificado ninguna operación, mostrar todo el contenido del objeto JSON
         results = searcher.data
