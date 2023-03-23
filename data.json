@@ -23,5 +23,10 @@
     "name": "Eve",
     "age": 45,
     "city": "Tokyo"
+  },
+  {
+    "name": "Hiram",
+    "age": 33,
+    "city": "Puebla"
   }
 ]

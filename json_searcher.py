@@ -11,7 +11,7 @@ class JSONSearcher: #Esta clase implementa un buscador y editor de datos en form
 
 #Métods de la clase JSONSearcher
     def search(self, **kwargs):
-        """ Busca objetos en la lista de datos que coincidan con los argumentos de búsqueda (name= Alice).
+        """ Busca objetos en la lista de datos que coincidan con los argumentos de búsqueda (name=Hiram).
         Devuelve una lista de objetos que coinciden con los argumentos de búsqueda."""
         results = []
         for item in self.data:
@@ -19,7 +19,7 @@ class JSONSearcher: #Esta clase implementa un buscador y editor de datos en form
                 results.append(item)
         return results
 
-    def insert(self, **kwargs): #Inserta un nuevo objeto en la lista (name= Hiram).
+    def insert(self, **kwargs): #Inserta un nuevo objeto en la lista (name=Hiram).
         self.data.append(kwargs)
 
     def edit(self, index, **kwargs): #Edita un objeto en la lista de datos.
@@ -87,15 +87,15 @@ def main():
             key, value = item.split("=")
             insert_query[key] = value
         searcher.insert(**insert_query) # Inserta el elemento en el objeto JSON
-        results = [insert_query] # Y Almacena el elemento insertado en la variable `results`
+        results = searcher.data # Almacena el elemento insertado en la variable `results`
 
-    elif args.edit is not None: # Si se quiere editar un elemento
+    elif args.edit is not None and args.edit < len(searcher.data): # Si se quiere editar un elemento
         edit_query = {}
         for item in args.insert:
             key, value = item.split("=")
             edit_query[key] = value
         searcher.edit(args.edit, **edit_query) # Edita el elemento en el objeto JSON
-        results = [searcher.data[args.edit]] # Y almacenar el elemento editado en la variable `results`
+        results = [searcher.data[args.edit]] # Y almacena el elemento editado en la variable `results`
 
     elif args.delete is not None: # Si se quiere eliminar un elemento
         searcher.delete(args.delete) # Elimina el elemento del objeto JSON
@@ -123,3 +123,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# Ejemplos de uso
+# python json_searcher.py --input_file data.json --output_file results.csv --search name=Hiram
+# python json_searcher.py --input_file data.json --output_file results.csv --insert name=Juan age=50 city=Oaxaca
+# python json_searcher.py --input_file data.json --output_file results.csv --edit 0 name=Hiram
+# python json_searcher.py --input_file data.json --output_file results.csv --delete 0
+# python json_searcher.py --input_file data.json --output_file results.csv
