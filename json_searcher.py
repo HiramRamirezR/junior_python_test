@@ -8,6 +8,7 @@ class JSONSearcher: #Esta clase implementa un buscador y editor de datos en form
         """ Constructor de la clase.
         Recibe como parámetro una lista de objetos JSON que se almacenan en data."""
         self.data = data
+        # self.file_path = file_path
 
 #Métods de la clase JSONSearcher
     def search(self, **kwargs):
@@ -52,12 +53,16 @@ class JSONSearcher: #Esta clase implementa un buscador y editor de datos en form
             with open(file_path, "w") as file:
                 json.dump(data_to_export, file, indent=4)
 
+            # actualizar el archivo JSON original
+            with open(self.file_path, "w") as file:
+                json.dump(data_to_export, file, indent=4)
+
 """ La función main() maneja los métodos de search, insert, edit y delete que se ingresan como argumentos
 en la CLI. Luego, se almacenan los resultados de la operación en `results`. """
 
 def main():
     #El módulo argparse para usa para definir los argumentos de la línea de comandos.
-    parser = argparse.ArgumentParser(prog="JSON Searcher", description="Search a JSON file for objects with specific attributes")
+    parser = argparse.ArgumentParser(prog="JSON Searcher", description="Busca un elemento en un archivo JSON.")
     parser.add_argument("--input_file", type=str, required=True, help="Ruta del archivo de entrada en formato JSON.")
     parser.add_argument("--output_file", type=str, required=True, help="Ruta del archivo de salida.")
     parser.add_argument("--search", type=str, nargs="*", help="Argumentos de búsqueda en formato 'clave=valor'.")
@@ -72,6 +77,7 @@ def main():
         data = json.load(file)
 
     searcher = JSONSearcher(data)
+    # searcher = JSON
 
 
     if args.search: # Si se hace una búsqueda
@@ -89,7 +95,8 @@ def main():
         searcher.insert(**insert_query) # Inserta el elemento en el objeto JSON
         results = searcher.data # Almacena el elemento insertado en la variable `results`
 
-    elif args.edit is not None and args.edit < len(searcher.data): # Si se quiere editar un elemento
+    # Si se quiere editar un elemento
+    elif args.edit is not None and args.edit < len(searcher.data):
         edit_query = {}
         for item in args.insert:
             key, value = item.split("=")
@@ -128,6 +135,6 @@ if __name__ == "__main__":
 # Ejemplos de uso
 # python json_searcher.py --input_file data.json --output_file results.csv --search name=Hiram
 # python json_searcher.py --input_file data.json --output_file results.csv --insert name=Juan age=50 city=Oaxaca
-# python json_searcher.py --input_file data.json --output_file results.csv --edit 0 name=Hiram
+# python json_searcher.py --input_file data.json --output_file results.csv --edit 0 name=Juan age=50 city=Oaxaca
 # python json_searcher.py --input_file data.json --output_file results.csv --delete 0
 # python json_searcher.py --input_file data.json --output_file results.csv
