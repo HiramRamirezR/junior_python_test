@@ -10,7 +10,7 @@ class JSONSearcher: #Esta clase implementa un buscador y editor de datos en form
         self.data = data
         # self.file_path = file_path
 
-#Métods de la clase JSONSearcher
+#Métodos de la clase JSONSearcher
     def search(self, **kwargs):
         """ Busca objetos en la lista de datos que coincidan con los argumentos de búsqueda (name=Hiram).
         Devuelve una lista de objetos que coinciden con los argumentos de búsqueda."""
@@ -54,15 +54,15 @@ class JSONSearcher: #Esta clase implementa un buscador y editor de datos en form
                 json.dump(data_to_export, file, indent=4)
 
             # actualizar el archivo JSON original
-            with open(self.file_path, "w") as file:
-                json.dump(data_to_export, file, indent=4)
+            with open(file_path, "w") as file:
+                json.dump(self.data, file, indent=4)
 
 """ La función main() maneja los métodos de search, insert, edit y delete que se ingresan como argumentos
 en la CLI. Luego, se almacenan los resultados de la operación en `results`. """
 
 def main():
-    #El módulo argparse para usa para definir los argumentos de la línea de comandos.
-    parser = argparse.ArgumentParser(prog="JSON Searcher", description="Busca un elemento en un archivo JSON.")
+    #El módulo argparse se usa para definir los argumentos de la línea de comandos.
+    parser = argparse.ArgumentParser(prog="JSON Searcher", description="Busca y edita elementos en un archivo JSON.")
     parser.add_argument("--input_file", type=str, required=True, help="Ruta del archivo de entrada en formato JSON.")
     parser.add_argument("--output_file", type=str, required=True, help="Ruta del archivo de salida.")
     parser.add_argument("--search", type=str, nargs="*", help="Argumentos de búsqueda en formato 'clave=valor'.")
@@ -77,7 +77,6 @@ def main():
         data = json.load(file)
 
     searcher = JSONSearcher(data)
-    # searcher = JSON
 
 
     if args.search: # Si se hace una búsqueda
@@ -93,7 +92,7 @@ def main():
             key, value = item.split("=")
             insert_query[key] = value
         searcher.insert(**insert_query) # Inserta el elemento en el objeto JSON
-        results = searcher.data # Almacena el elemento insertado en la variable `results`
+        results = searcher.data # Almacena el elemento insertado en `results`
 
     # Si se quiere editar un elemento
     elif args.edit is not None and args.edit < len(searcher.data):
@@ -106,7 +105,7 @@ def main():
 
     elif args.delete is not None: # Si se quiere eliminar un elemento
         searcher.delete(args.delete) # Elimina el elemento del objeto JSON
-        results = [] # Y asigna una lista vacía a la variable `results`
+        results = searcher.data # Regresa el objeto JSON sin el elemento eliminado
 
     else: # Si no se ha especificado ninguna operación, mostrar todo el contenido del objeto JSON
         results = searcher.data
@@ -123,7 +122,7 @@ def main():
                         export_format=args.export_format,
                         results=results,
                         results_only=True)
-    else: # Si no se encuentrann resultados
+    else: # Si no se encuentran resultados
         print("No results found.")
 
 

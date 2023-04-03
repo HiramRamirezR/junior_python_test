@@ -1,32 +1,47 @@
 [
-  {
-    "name": "Alice",
-    "age": 25,
-    "city": "London"
-  },
-  {
-    "name": "Bob",
-    "age": 30,
-    "city": "New York"
-  },
-  {
-    "name": "Charlie",
-    "age": 35,
-    "city": "Paris"
-  },
-  {
-    "name": "David",
-    "age": 40,
-    "city": "Sydney"
-  },
-  {
-    "name": "Eve",
-    "age": 45,
-    "city": "Tokyo"
-  },
-  {
-    "name": "Hiram",
-    "age": 33,
-    "city": "Puebla"
-  }
+    {
+        "name": "Charlie",
+        "age": 35,
+        "city": "Paris"
+    },
+    {
+        "name": "David",
+        "age": 40,
+        "city": "Sydney"
+    },
+    {
+        "name": "Eve",
+        "age": 45,
+        "city": "Tokyo"
+    },
+    {
+        "name": "Hiram",
+        "age": 33,
+        "city": "Puebla"
+    },
+    {
+        "name": "Juan",
+        "age": "50",
+        "city": "Xalapa"
+    },
+    {
+        "name": "Raul",
+        "age": "50",
+        "city": "Xalapa"
+    },
+    {
+        "name": "Lucero",
+        "age": "31",
+        "city": "Oaxaca"
+    },
+    {
+        "name": "Brigham",
+        "age": "6",
+        "city": "Puebla"
+    },
+    {
+        "name": "Azul",
+        "age": "4",
+        "city": "Puebla"
+    }
 ]
