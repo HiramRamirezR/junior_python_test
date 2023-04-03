@@ -1,28 +1,8 @@
 [
     {
-        "name": "Charlie",
-        "age": 35,
-        "city": "Paris"
-    },
-    {
-        "name": "David",
-        "age": 40,
-        "city": "Sydney"
-    },
-    {
-        "name": "Eve",
-        "age": 45,
-        "city": "Tokyo"
-    },
-    {
         "name": "Hiram",
-        "age": 33,
+        "age": "33",
         "city": "Puebla"
-    },
-    {
-        "name": "Juan",
-        "age": "50",
-        "city": "Xalapa"
     },
     {
         "name": "Raul",
